@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Options</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .payment-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .payment-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .payment-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .payment-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .payment-methods {
+            padding: 25px;
+        }
+
+        .method {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-color: var(--accent);
+        }
+
+        .method::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: var(--accent);
+            transition: height 0.3s ease;
+        }
+
+        .method:hover::before {
+            height: 100%;
+        }
+
+        .method-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+
+        .method-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .method-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .detail-label {
+            width: 100px;
+            font-weight: 500;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            flex: 1;
+            font-weight: 500;
+            color: var(--dark);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .qris-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .qris-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: transform 0.3s ease;
+        }
+
+        .qris-image:hover {
+            transform: scale(1.02);
+        }
+
+        .qris-note {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+
+        .payment-footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            font-size: 0.8rem;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 480px) {
+            .payment-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .method {
+                padding: 15px;
+            }
+            
+            .method-title {
+                font-size: 1.1rem;
+            }
+            
+            .detail-label {
+                width: 80px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(67, 97, 238, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container fade-in">
+        <div class="payment-header">
+            <h1>Payment Options</h1>
+            <p>Choose your preferred payment method</p>
+        </div>
+        
+        <div class="payment-methods">
+            <!-- DANA Payment Method -->
+            <div class="method pulse" onclick="copyToClipboard('081282171403', 'DANA number copied!')">
+                <div class="method-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_DANA.svg" alt="DANA" class="method-icon">
+                    <h2 class="method-title">DANA</h2>
+                </div>
+                <div class="method-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Phone Number:</span>
+                        <span class="detail-value">081282171403</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GoPay Payment Method -->
+            <div class="method pulse" onclick="copyToClipboard('087836632663', 'GoPay number copied!')">
+                <div class="method-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" alt="GoPay" class="method-icon">
+                    <h2 class="method-title">GoPay</h2>
+                </div>
+                <div class="method-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Phone Number:</span>
+                        <span class="detail-value">087836632663</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- QRIS Payment Method -->
+            <div class="method">
+                <div class="method-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" alt="QRIS" class="method-icon">
+                    <h2 class="method-title">QRIS</h2>
+                </div>
+                <div class="method-details">
+                    <div class="qris-container">
+                        <img src="https://img1.pixhost.to/images/6829/616277898_imgtmp.jpg" alt="QRIS Code" class="qris-image">
+                        <p class="qris-note">Scan this QR code using your mobile banking or e-wallet app</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="payment-footer">
+            <p>After making payment, please confirm via WhatsApp or email with your payment receipt.</p>
+        </div>
+    </div>
+
+    <script>
+        // Copy to clipboard function
+        function copyToClipboard(text, message) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(message);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    alert(message);
+                } catch (err) {
+                    alert('Failed to copy text');
+                }
+                document.body.removeChild(textarea);
+            });
+        }
+
+        // Add animation to payment methods on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const methods = document.querySelectorAll('.method');
+            methods.forEach((method, index) => {
+                method.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
